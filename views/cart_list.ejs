@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <% include head %>
+    </head>
+
+    <body>
+        <% include header %>
+
+        <div class="container">
+            <div class="main-content">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <form action="/Cart/Checkout" method="post">
+                                <button type="submit" class="btn btn-primary">Checkout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <p></p>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-responsive table-condensed table-bordered table-hover">
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Name</th>
+                                <th>Sale Price</th>
+                                <th>Discount</th>
+                                <th>Paid</th>
+                                <th></th>
+                            </tr>
+
+                            <% if (data != 'undefined') { %>
+                                <% var i = 1 %>
+                                <% data.forEach(function(row) { %>
+                                    <tr>
+                                        <td><%= i++ %></td>
+                                        <td><%= row.ProductName %></td>
+                                        <td><%= row.SalePrice %></td>
+                                        <% if (row.DiscountAmount > 0) { %>
+                                            <td><%= row.DiscountAmount %></td>
+                                        <% } else { %>
+                                            <td>0</td>
+                                        <% } %>
+                                        <td><%= row.ChargedAmount %></td>
+                                        <td>
+                                            <form action="/Cart/Delete?id=<%= row.ProductID %>&amp;rev=<%= row._rev %>" method="post">
+                                                <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <form action="/Cart/Checkout" method="post">
+                                <button type="submit" class="btn btn-primary">Checkout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <% include footer %>
+    </body>
+
+</html>

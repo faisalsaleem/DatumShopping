@@ -1,0 +1,25 @@
+﻿extends layout
+
+block content
+    br
+    br
+    .col-md-4
+    .col-md-4
+        form(action="/login" method="post")
+            .form.form-horizontal
+                div.form-group
+                    label(for='username') User Name:
+                    input(type='text' name='username' class='form-control'
+                    required, data-required-msg='Please enter user name')
+
+                div.form-group
+                    label(for='password') Password:
+                    input(type='password' name='password' class='form-control'
+                    required, data-required-msg='Please enter password')
+
+                button(type='submit' class='btn btn-default') Log In
+
+                //#message
+
+               label(class='label label-danger') #{message}
+    

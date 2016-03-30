@@ -1,0 +1,61 @@
+﻿extends layout
+
+block content
+
+    .form.form-horizontal
+
+        form(method='POST' enctype='multipart/form-data')
+            input(type='hidden' id='_id' name='_id' value='#{data._id}')
+            input(type='hidden' id='_ver' name='_ver' value='#{data._ver}')
+
+            div.form-group
+                label(for='ProductName' class='col-md-1') Name
+                .col-md-5
+                    input(type='text', id='ProductName', name='ProductName', class='form-control' 
+                required, data-required-msg='Please provide product name', value='#{data.ProductName}')
+
+            
+                label(for='SalePrice' class='col-md-1') Sale Price
+                .col-md-2
+                    input(type='text', id='SalePrice', name='SalePrice', class='form-control' value='#{data.SalePrice}')
+
+                label(for='DiscountAmount' class='col-md-1') Discount $
+                .col-md-2
+                    if data.DiscountAmount
+                        input(type='text', id='DiscountAmount', name='DiscountAmount', class='form-control' value='#{data.DiscountAmount}')
+                    else
+                        input(type='text', id='DiscountAmount', name='DiscountAmount', class='form-control' value='')
+
+            div.form-group
+                label(for='Description' class='col-md-1') Description
+                .col-md-11
+                    textarea(id='Description', name='Description', class='form-control' rows=5) #{data.Description}
+
+            div.row
+                div.col-md-6
+                    div.form-group
+                        label(for='Picture' class='col-md-2') Picture
+                        .col-md-10
+                            input(type='file', id='Picture', name='Picture', class='form-control' accept="image/*" value='#{data.SalePrice}')
+
+                    div.form-group
+                        .col-md-2
+                        .col-md-10
+                            .checkbox
+                                label
+                                    if (data.IsNewArrival)
+                                        input(type='checkbox' id='IsNewArrival' name='IsNewArrival' value='true' checked)
+                                    else
+                                        input(type='checkbox' id='IsNewArrival' name='IsNewArrival' value='true')
+                                    input(type='checkbox' id='IsNewArrival' name='IsNewArrival' hidden value='false')
+                                    | New Arrival
+                div.col-md-6
+                    div.form-group
+                        div(style="height:100px; width:100px; text-align:center" class='img img-thumbnail')
+                            img(src='#{data.PicturePath}' style='display: inline-block; vertical-align: middle; max-height:100%; max-width:100%')
+
+            div.actions
+                .col-md-1
+                .col-md-1
+                    input(type='submit', value='Save', class='btn btn-primary')
+

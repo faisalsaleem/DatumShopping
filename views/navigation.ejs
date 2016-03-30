@@ -1,0 +1,11 @@
+
+<ul class='nav nav-pills nav-stacked'>
+
+    <% categories.forEach(function(item) { %>
+        <li>
+            <a href="/?c=<%= item.CategoryName %>"> <%= item.CategoryName %></a>
+        </li>
+    <% }) %>
+
+</ul>
+

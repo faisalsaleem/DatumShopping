@@ -1,0 +1,24 @@
+﻿extends layout
+block content
+    form(method='POST' enctype='multipart/form-data')
+        input(type='hidden' id='_id' name='_id' value='#{data._id}')
+        input(type='hidden' id='_ver' name='_ver' value='#{data._ver}')
+        input(type='hidden' id='ProductName' name='ProductName' value='#{data.ProductName}')
+        input(type='hidden' id='SalePrice' name='SalePrice' value='#{data.SalePrice}')
+        input(type='hidden' id='Description' name='Description' value='#{data.Description}')
+        input(type='hidden' id='DiscountAmount' name='DiscountAmount' value='#{data.DiscountAmount}')
+
+        .col-md-2
+            img(src='#{data.PicturePath}' class='img img-thumbnail')
+        .col-md-10
+            div
+                h2(style='display:inline-block') #{data.ProductName}
+                &nbsp;&nbsp;&nbsp;
+                if data.DiscountAmount > 0
+                    span(style='text-decoration: line-through') $#{data.SalePrice}
+                    &nbsp;&nbsp;&nbsp;
+                    h4(style='display:inline-block')
+                        span(class='label label-success') $#{data.SalePrice - data.DiscountAmount}
+            div(style='white-space:pre-line') #{data.Description}
+            br
+            button(class='btn btn-primary') Add to Cart

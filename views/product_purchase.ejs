@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <% include head %>
+    </head>
+
+    <body>
+        <% include header %>
+
+        <div class="container">
+            <div class="main-content">
+
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="_id" name="_id" value="<%= data._id %>"/>
+                    <input type="hidden" id="_ver" name="_ver" value="<%= data._ver %>"/>
+                    <input type="hidden" id="ProductName" name="ProductName" value="<%= data.ProductName %>"/>
+                    <input type="hidden" id="SalePrice" name="SalePrice" value="<%= data.SalePrice %>"/>
+                    <input type="hidden" id="Description" name="Description" value="<%= data.Description %>"/>
+                    <input type="hidden" id="DiscountAmount" name="DiscountAmount" value="<%= data.DiscountAmount %>"/>
+                    <div class="col-md-2">
+                        <img src="<%= data.PicturePath %>" class="img img-thumbnail"/>
+                    </div>
+                    <div class="col-md-10">
+                        <div>
+                            <h2 style="display:inline-block"> <%= data.ProductName %> </h2>&nbsp;&nbsp;&nbsp;
+                            <% if (data.DiscountAmount) { %>
+                                <span style="text-decoration: line-through">$<%= data.SalePrice %></span>&nbsp;&nbsp;&nbsp;
+                                <h4 style="display:inline-block">
+                                    <span class="label label-success">$<%= data.SalePrice - data.DiscountAmount %></span>
+                                </h4>
+                            <% } %>
+                        </div>
+                        <div style="white-space:pre-line"><%= data.Description %></div>
+                        <br/>
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <% include footer %>
+    </body>
+
+</html>

@@ -1,0 +1,24 @@
+extend layout
+
+block content
+    .row
+        each item, i in data
+            .col-sm-2
+                div(style="height:150px; width:100%; text-align:center" class='img img-thumbnail')
+                    a(href='/Product/Purchase?id=#{item.value._id}')
+                        img(src='#{item.value.PicturePath}' style='display: inline-block; vertical-align: middle; max-height:100%; max-width:100%')
+                br
+                a(href='/Product/Purchase?id=#{item.value._id}')
+                    span #{item.value.ProductName}
+                br
+                if item.value.DiscountAmount > 0
+                    span(class='small' style='text-decoration: line-through') $#{item.value.SalePrice}
+                    &nbsp;
+                    h4(style='display:inline-block')
+                        span(class='label label-success') $&nbsp;#{item.value.SalePrice - item.value.DiscountAmount}
+                else
+                    span(class='small') $#{item.value.SalePrice}
+                    h4(style='display:inline-block')
+                        span(class='label') &nbsp;
+                p
+                    br

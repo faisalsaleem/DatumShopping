@@ -1,0 +1,2 @@
+C:\Projects\NodeJS\ShoppingCart\obj\Debug\ShoppingCart.njsprojResolveAssemblyReference.cache
+C:\Projects\NodeJS\ShoppingCart\bin\Microsoft.NodejsTools.WebRole.dll

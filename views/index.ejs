@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <% include head %>
+    </head>
+
+    <body>
+        <% include header %>
+
+        <div class="container">
+            <div class="main-content">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <% include navigation %>
+                    </div>
+                    <div class="col-sm-10">
+                        <% data.forEach(function(item) { %>
+                            <div class="col-sm-2">
+                                <div style="height:150px; width:100%; text-align:center" class='img img-thumbnail'>
+                                    <a href='/Product/Purchase?id=<%= item._id %>'>
+                                        <img src='<%= item.PicturePath %>' style='display: inline-block; vertical-align: middle; max-height:100%; max-width:100%'>
+                                    </a>
+                                </div>
+                                <br>
+                                <a href="/Product/Purchase?id=<%= item._id %>">
+                                    <span><%= item.ProductName %></span>
+                                </a>
+                                <br>
+                                <% if(item.DiscountAmount > 0){ %>
+                                <span class='small' style='text-decoration: line-through'> $<%= item.SalePrice %></span>
+                                &nbsp;
+                                <h4 style='display:inline-block'>
+                                    <span class='label label-success'> $&nbsp;<%= item.SalePrice - item.DiscountAmount %> </span>
+                                </h4>
+                                <% } else { %>
+                                <span class='small'>$<%= item.SalePrice %></span>
+                                <h4 style='display:inline-block'>
+                                    <span class='label'> $&nbsp; </span>
+                                </h4>
+                                <% } %>
+
+                                <p><br></p>
+
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% include footer %>
+    </body>
+
+</html>

@@ -1,0 +1,47 @@
+﻿extends layout
+
+block content
+
+    br
+
+    .row
+        .col-md-12
+            .pull-right
+                form(action='/Cart/Checkout' method='post')
+                    button(type='submit' class='btn btn-primary') Checkout
+
+    p
+
+    .row
+        .col-md-12
+            table(class="table table-responsive table-condensed table-bordered table-hover")
+                tr
+                    th Sr.
+                    th Name
+                    th Sale Price
+                    th Discount
+                    th Paid
+                    th
+
+                if data
+                    each row, i in data
+                        tr
+                            td #{i+1}
+                            td #{row.ProductName}
+                            td #{row.SalePrice}
+                            if row.DiscountAmount > 0
+                                td #{row.DiscountAmount}
+                            else
+                                td 0
+                            td #{row.ChargedAmount}
+                            td
+                                form(action='/Cart/Delete?id=#{row._id}&rev=#{row._rev}' method='post')
+                                    button(type='submit' class='btn btn-danger btn-xs') Delete
+
+    .row
+        .col-md-12
+            .pull-right
+                form(action='/Cart/Checkout' method='post')
+                    button(type='submit' class='btn btn-primary') Checkout
+
+

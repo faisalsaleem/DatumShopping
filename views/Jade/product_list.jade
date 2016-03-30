@@ -1,0 +1,22 @@
+﻿extends layout
+
+block content
+
+    br
+
+    table(class="table table-responsive table-condensed table-bordered table-hover")
+        tr
+            th Sr.
+            th Name
+            th Sale Price
+            th
+
+        each row, i in data
+            tr
+                td #{i+1}
+                td 
+                    a(href='/Product/Create?id=#{row.value._id}') #{row.value.ProductName}
+                td #{row.value.SalePrice}
+                td
+                    form(action='/Product/Delete?id=#{row.value._id}&rev=#{row.value._rev}' method='post')
+                        button(type='submit' class='btn btn-danger btn-xs') Delete
