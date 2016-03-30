@@ -73,9 +73,9 @@ app.use(function (req, res, next) {
         else {
             res.categories = [];
         }
+        next();
     });
 
-     next();
  });
 
 passport.use(new LocalStrategy( function (username, password, cb) {
@@ -152,13 +152,24 @@ app.get('/logout',
 });
 
 app.get('/', function (req, res) {
-    var view = req.query.cat ? req.query.cat : 'by_type';
+    var view = req.query.cat ? req.query.cat : null;
+    var options = {};
 
-    console.log('view:' + view);
+    if (!view){
+        if (req.query.c){
+            view = 'by_category';
+            options.key = req.query.c;
+        } else {
+            view = 'by_type';
+        }
+    };
 
-    db.view('product/' + view , function(err, rows) {
+    console.log('view:' + view + ', options:' + JSON.stringify(options));
+    console.log('categories:' + JSON.stringify(res.categories));
+
+    db.view('product/' + view, options , function(err, rows) {
         if (!err) {
-            console.log('rows:' + rows);
+            rows =  rows ? rows : [];
 
             res.render('index', { title: 'Products'
                 , isAuthenticated: req.isAuthenticated()
