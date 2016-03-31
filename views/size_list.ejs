@@ -11,25 +11,23 @@
         <div class="container">
             <div class="main-content">
 
-                <a href="/Product/Create" class="btn btn-default">New</a>
+                <a href="/Size/Create" class="btn btn-default">New</a>
                 <p><br></p>
 
                 <table class="table table-responsive table-condensed table-bordered table-hover">
                     <tr>
-                        <th>Sr.</th>
-                        <th>Name</th>
-                        <th>Sale Price</th>
-                        <th></th>
+                        <th class="col-sm-1">Sr.</th>
+                        <th class="col-sm-10">Name</th>
+                        <th class="col-sm-1"></th>
                     </tr>
 
                     <% var i = 1 %>
                     <% data.forEach(function(row) { %>
                         <tr>
                             <td><%= i++ %></td>
-                            <td> <a href="/Product/Create?id=<%= row._id %>"> <%= row.ProductName %> </a> </td>
-                            <td> <%= row.SalePrice %> </td>
+                            <td> <a href="/Size/Create?id=<%= row._id %>"> <%= row.SizeName %> </a> </td>
                             <td>
-                                <form action="/Product/Delete?id=<%= row._id %>&amp;rev=<%= row._rev %>" method="post">
+                                <form action="/Size/Delete?id=<%= row._id %>&amp;rev=<%= row._rev %>" method="post">
                                     <button type="submit" class="btn btn-danger btn-xs">Delete</button>
                                 </form>
                             </td>

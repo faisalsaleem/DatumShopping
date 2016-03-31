@@ -14,18 +14,9 @@
 var appBaseFolder = path.join(__dirname, '\\..');
 var uploadFolder = appBaseFolder + "\\public\\uploads\\";
 
-//router.use(multer({
-//    dest: './uploads/',
-//    rename: function (fieldname, filename) {
-//        return filename.replace(/\W+/g, '-').toLowerCase() + Date.now()
-//    }
-//}));
-
 router.get('/', routesAuthorize.isAuthorized(), function (req, res) {
     db.view('product/by_type', function (err, rows) {
         if (!err) {
-            console.log(JSON.stringify(rows));
-
             res.render('product_list', { title: 'Products', isAuthenticated: req.isAuthenticated(), data: rows });
         }
         else {
@@ -53,6 +44,19 @@ router.post('/Delete', routesAuthorize.isAuthorized(), function (req, res) {
     });
 });
 
+router.get('/Create', routesAuthorize.isAuthorized(), function (req, res, next) {
+    db.view('size/by_name', function (err, rows) {
+        if (!err) {
+            res.sizes = rows;
+        }
+        else {
+            console.log('There was an error fetching sizes.' + err);
+            res.sizes = [];
+        }
+        next();
+    });
+});
+
 router.get('/Create', routesAuthorize.isAuthorized(), function (req, res) {
     var data = {
         _id: '',
@@ -65,85 +69,27 @@ router.get('/Create', routesAuthorize.isAuthorized(), function (req, res) {
     
     if (!req.query.id) {
         
-        res.render('product_new', { title: 'Create Product', isAuthenticated: req.isAuthenticated(), data: data })
+        res.render('product_new', { title: 'Create Product', isAuthenticated: req.isAuthenticated()
+            , data: data
+            , categories: res.categories
+            , sizes: res.sizes
+        });
 
     } else {
         db.get(req.query.id, { revs_info: true }, function (err, body) {
             if (!err) {
-                console.log(body);
+                console.log("Product:" + body);
+                console.log(JSON.stringify(res.categories));
 
-                res.render('product_new', { title: 'Create Product', isAuthenticated: req.isAuthenticated(), data: body })
+                res.render('product_new', { title: 'Create Product'
+                    , isAuthenticated: req.isAuthenticated()
+                    , data: body
+                    , categories: res.categories
+                    , sizes: res.sizes
+                })
             }
         })
     }
-});
-
-router.post('/Create_old', urlencodedParser, routesAuthorize.isAuthorized(), function (req, res) {
-    var form = new formidable.IncomingForm();
-    
-    console.log(req.body);
-    
-    form.parse(req, function (err, fields, files) {
-        if (!err) {
-            console.log('fields:' + JSON.stringify(fields));
-            console.log('files:' + JSON.stringify(files));
-            
-            var newfile = uploadFolder + uuid.v1() + path.extname(files.Picture.name);
-            
-            console.log('Picture Uploaded:' + files.Picture.name);
-            
-            if (files.Picture.name) {
-                fs.readFile(files.Picture.path, function (err, data) {
-                    fs.writeFile(newfile, data, function (err) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            response = {
-                                message: "File uploaded successfully",
-                                filename: files.Picture.name
-                            };
-                            console.log(response);
-                        }
-                    });
-                });
-            }
-            
-            var data = {
-                Type: 'Product',
-                ProductName: fields.ProductName,
-                SalePrice: fields.SalePrice,
-                PicturePath: newfile,
-                IsNewArrival: fields.IsNewArrival,
-                Description: fields.Description,
-                DiscountAmount: fields.DiscountAmount
-            };
-            
-            db.get(fields._id, function (err, body) {
-                if (!err) {
-                    data._rev = body._rev;
-                    if (!files.Picture.name) data.PicturePath = body.PicturePath
-                }
-                
-                if (data.PicturePath) {
-                    console.log('picture path1:' + data.PicturePath);
-                    data.PicturePath = data.PicturePath.replace(appBaseFolder + '\\public', '');
-                    console.log('picture path2:' + data.PicturePath);
-                    data.PicturePath = data.PicturePath.replaceAll('\\', '/');
-                    console.log('picture path3:' + data.PicturePath);
-                }
-                
-                db.save(fields._id, data, function (err, body) {
-                    if (!err) {
-                        console.log('Product created successfully.');
-                        res.writeHead(301, {
-                            Location: (req.socket.encrypted ? 'https://' : 'http://') + req.headers.host + '/Product'
-                        });
-                        res.end();
-                    }
-                })
-            })
-        }
-    })
 });
 
 router.post('/Create', upload.single('Picture'), routesAuthorize.isAuthorized(), function (req, res) {
@@ -151,32 +97,28 @@ router.post('/Create', upload.single('Picture'), routesAuthorize.isAuthorized(),
     console.log('file: ' + JSON.stringify(req.file));
     console.log('body: ' + JSON.stringify(req.body));
 
-    var newfile = req.file.destination.replace('public', '') + req.file.filename;
+    if (req.file){
+        var newfile = req.file.destination.replace('public', '') + req.file.filename;
+    }
 
     console.log('Picture Uploaded: ' + newfile);
 
     var data = {
-        Type: 'Product',
-        ProductName: req.body.ProductName,
-        SalePrice: req.body.SalePrice,
-        PicturePath: newfile,
-        IsNewArrival: req.body.IsNewArrival,
-        Description: req.body.Description,
-        DiscountAmount: req.body.DiscountAmount
+        Type: 'Product'
+        ,ProductName: req.body.ProductName
+        ,SalePrice: req.body.SalePrice
+        ,PicturePath: newfile
+        ,IsNewArrival: req.body.IsNewArrival
+        ,Description: req.body.Description
+        ,DiscountAmount: req.body.DiscountAmount
+        ,CategoryID: req.body.CategoryID
+        ,Sizes: req.body.Sizes
     };
 
     db.get(req.body._id, function (err, body) {
         if (!err) {
             data._rev = body._rev;
             if (!newfile) data.PicturePath = body.PicturePath
-        }
-
-        if (data.PicturePath) {
-            console.log('picture path1:' + data.PicturePath);
-            data.PicturePath = data.PicturePath.replace(appBaseFolder + '\\public', '');
-            console.log('picture path2:' + data.PicturePath);
-            data.PicturePath = data.PicturePath.replaceAll('\\', '/');
-            console.log('picture path3:' + data.PicturePath);
         }
 
         db.save(req.body._id, data, function (err, body) {
@@ -254,6 +196,7 @@ router.post('/Purchase', urlencodedParser, function (req, res) {
         }
     })        
 })
+
 
 module.exports = router;
 

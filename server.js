@@ -1,7 +1,6 @@
 var express = require('express')
     , stylus = require('stylus')
     , nib = require('nib')
-    //, dbold = require('nano')('http://127.0.0.1:5984').db.use('datum_shopping')
     , passport = require('passport')
     , LocalStrategy = require('passport-local').Strategy
     , routesAccount = require('./Controllers/account.js')
@@ -9,6 +8,9 @@ var express = require('express')
     , routesSales = require('./Controllers/sales.js')
     , routesCart = require('./Controllers/cart.js')
     , routesCategory = require('./Controllers/category.js')
+    , routesBrand = require('./Controllers/brand.js')
+    , routesSize = require('./Controllers/size.js')
+    , routesColor = require('./Controllers/color.js')
     , routesTemp = require('./Controllers/temp.js')
     , routesError = require('./Controllers/error.js')
     , morgan = require('morgan')
@@ -24,9 +26,6 @@ var app = express();
 // typical implementation of this is as simple as supplying the user ID when
 // serializing, and querying the user record by ID from the database when
 // deserializing.
-
-
-//var db = nano.db.use('datum_shopping');
 
 app.use(morgan('dev')); //combined, common, dev, short, tiny
 
@@ -54,8 +53,7 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(stylus.middleware(
-    {
+app.use(stylus.middleware({
         src: __dirname + '/public'
         , compile: compile
     }));
@@ -145,8 +143,7 @@ app.post('/login', function(req, res, next) {
 })(req, res, next)
 });
 
-app.get('/logout',
-  function (req, res) {
+app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
@@ -189,6 +186,9 @@ app.use('/Account', routesAccount);
 app.use('/Sales', routesSales);
 app.use('/Cart', routesCart);
 app.use('/Category', routesCategory);
+app.use('/Brand', routesBrand);
+app.use('/Color', routesColor);
+app.use('/Size', routesSize);
 app.use('/Temp', routesTemp);
 app.use('/Error', routesError);
 

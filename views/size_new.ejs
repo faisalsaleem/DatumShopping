@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <% include head %>
+    </head>
+
+    <body>
+        <% include header %>
+
+        <div class="container">
+            <div class="main-content">
+
+                <div class="form form-horizontal">
+                    <form method="post">
+                        <input type="hidden" id="_id" name="_id" value="<%= data._id %>">
+                        <input type="hidden" id="_ver" name="_ver" value="<%= data._ver %>">
+
+                        <div class="form-group">
+
+                            <label for="SizeName" class="col-md-1">Name</label>
+                            <div class="col-md-5">
+                                <input type="text" id="SizeName" name="SizeName" class="form-control"
+                                        required="required" data-required-msg="Please provide size name" value="<%= data.SizeName %>">
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-1">
+                                <input type="submit" value="Save" class="btn btn-primary"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <% include footer %>
+    </body>
+
+</html>
