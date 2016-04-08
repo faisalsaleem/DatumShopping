@@ -11,6 +11,8 @@
         <div class="container">
             <div class="main-content">
 
+                <div class="form form-horizontal">
+
                 <form method="POST" enctype="multipart/form-data">
                     <input type="hidden" id="_id" name="_id" value="<%= data._id %>"/>
                     <input type="hidden" id="_ver" name="_ver" value="<%= data._ver %>"/>
@@ -18,24 +20,86 @@
                     <input type="hidden" id="SalePrice" name="SalePrice" value="<%= data.SalePrice %>"/>
                     <input type="hidden" id="Description" name="Description" value="<%= data.Description %>"/>
                     <input type="hidden" id="DiscountAmount" name="DiscountAmount" value="<%= data.DiscountAmount %>"/>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <img src="<%= data.PicturePath %>" class="img img-thumbnail"/>
                     </div>
-                    <div class="col-md-10">
-                        <div>
-                            <h2 style="display:inline-block"> <%= data.ProductName %> </h2>&nbsp;&nbsp;&nbsp;
-                            <% if (data.DiscountAmount) { %>
-                                <span style="text-decoration: line-through">$<%= data.SalePrice %></span>&nbsp;&nbsp;&nbsp;
-                                <h4 style="display:inline-block">
-                                    <span class="label label-success">$<%= data.SalePrice - data.DiscountAmount %></span>
-                                </h4>
-                            <% } %>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h2 style="display:inline-block"> <%= data.ProductName %> </h2>&nbsp;&nbsp;&nbsp;
+                            </div>
                         </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-panel">Price:</label>
+
+                            <div class="col-sm-11">
+                                <% if (data.DiscountAmount > 0) { %>
+                                    <span style="text-decoration: line-through">$<%= data.SalePrice %></span>&nbsp;&nbsp;&nbsp;
+                                    <h4 style="display:inline-block">
+                                        <span class="label label-success">$<%= data.SalePrice - data.DiscountAmount %></span>
+                                    </h4>
+                                    <% } else { %>
+                                    <strong>$<%= data.SalePrice %></strong>
+                                <% } %>
+                            </div>
+                        </div>
+
                         <div style="white-space:pre-line"><%= data.Description %></div>
-                        <br/>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Size:</label>
+                            <div class="col-sm-11">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <% if (data.Sizes) { data.Sizes.forEach(function(row) { %>
+                                        <label class="btn btn-default btn-sm">
+                                            <input type="radio" name="SizeID" id="SizeID" value="<%= row._id %>" autocomplete="off">
+                                            <label name="SizeName" id="SizeName"> <%= row.SizeName %> </label>
+                                        </label>
+                                    <% })} %>
+                                    <input type="hidden" name="SelectedSizeName" id="SelectedSizeName" value="">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">Color:</label>
+
+                            <div class="col-sm-11">
+
+                                <div class="btn-group" data-toggle="buttons">
+                                    <% if (data.Colors) { data.Colors.forEach(function(row) { %>
+                                    <label class="btn btn-default btn-sm">
+                                        <input type="radio" name="ColorID" id="ColorID" value="<%= row._id %>" autocomplete="off">
+                                        <label name="ColorName" id="ColorName"> <%= row.ColorName %> </label>
+                                    </label>
+                                    <% })} %>
+                                    <input type="hidden" name="SelectedColorName" id="SelectedColorName" value="">
+                                </div>
+                            </div>
+                        </div>
+
                         <button class="btn btn-primary">Add to Cart</button>
                     </div>
                 </form>
+                </div>
+
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('input[type=radio][name=SizeID]').change(function() {
+                            //alert(this.value);
+                            $('#SelectedSizeName').val($(this).closest('label').text().trim());
+                       });
+
+                        $('input[type=radio][name=ColorID]').change(function() {
+                            //alert(this.value);
+                            $('#SelectedColorName').val($(this).closest('label').text().trim());
+                        });
+                    });
+                </script>
 
             </div>
         </div>

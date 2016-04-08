@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <% include head %>
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+        <script type="text/javascript">
+
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages':['corechart', 'gauge']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(pieChart);
+            google.charts.setOnLoadCallback(barChart);
+            google.charts.setOnLoadCallback(gaugeChart);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function pieChart() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                    ['Mushrooms', 3],
+                    ['Onions', 1],
+                    ['Olives', 1],
+                    ['Zucchini', 1],
+                    ['Pepperoni', 2]
+                ]);
+
+                // Set chart options
+                var options = {
+                    'title':'How Much Pizza I Ate Last Night'
+                    ,'height':300
+                    ,'is3D':true
+                    ,'legend':'right'
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+                chart.draw(data, options);
+            }
+
+            function barChart() {
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                    ['Mushrooms', 3],
+                    ['Onions', 1],
+                    ['Olives', 1],
+                    ['Zucchini', 1],
+                    ['Pepperoni', 2]
+                ]);
+
+                // Set chart options
+                var options = {
+                    'title':'How Much Pizza I Ate Last Night'
+                    ,'height':300
+                    ,'is3D':true
+                    ,'legend':'right'
+                    ,animation:{
+                        duration:1000,
+                        easing: 'out'
+                    }
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart'));
+                chart.draw(data, options);
+            }
+
+            function gaugeChart(){
+                var data = google.visualization.arrayToDataTable([
+                        ['Label', 'Value'],
+                        ['Memory', 80],
+                        ['CPU', 55],
+                        ['Network', 68]
+                ]);
+
+                var options = {
+                    height: 300,
+                    redFrom: 90, redTo: 100,
+                    yellowFrom: 75, yellowTo: 90,
+                    minorTicks: 5
+                };
+
+                var chart = new google.visualization.Gauge(document.getElementById('gauge_chart'));
+                chart.draw(data, options);
+
+                setInterval(function () {
+                    data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+                    chart.draw(data, options);
+                }, 3000);
+
+                setInterval(function () {
+                    data.setValue(1, 1, 0 + Math.round(100 * Math.random()));
+                    chart.draw(data, options);
+                }, 4000);
+
+                setInterval(function () {
+                    data.setValue(2, 1, 0 + Math.round(100 * Math.random()));
+                    chart.draw(data, options);
+                }, 5000);
+            }
+
+        </script>
+    </head>
+
+    <body>
+        <% include header %>
+
+        <div class="container">
+            <div class="main-content">
+
+                <div class="col-sm-6 img-thumbnail">
+                    <div id="pie_chart"></div>
+                </div>
+
+                <div class="col-sm-6 img-thumbnail">
+                    <div id="bar_chart"></div>
+                </div>
+
+                <div class="col-sm-6 img-thumbnail">
+                    <div id="gauge_chart"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <% include footer %>
+    </body>
+
+</html>

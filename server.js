@@ -11,6 +11,7 @@ var express = require('express')
     , routesBrand = require('./Controllers/brand.js')
     , routesSize = require('./Controllers/size.js')
     , routesColor = require('./Controllers/color.js')
+    , routesDashboard = require('./Controllers/dashboard.js')
     , routesTemp = require('./Controllers/temp.js')
     , routesError = require('./Controllers/error.js')
     , morgan = require('morgan')
@@ -189,6 +190,7 @@ app.use('/Category', routesCategory);
 app.use('/Brand', routesBrand);
 app.use('/Color', routesColor);
 app.use('/Size', routesSize);
+app.use('/Dashboard', routesDashboard);
 app.use('/Temp', routesTemp);
 app.use('/Error', routesError);
 

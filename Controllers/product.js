@@ -57,22 +57,53 @@ router.get('/Create', routesAuthorize.isAuthorized(), function (req, res, next) 
     });
 });
 
+router.get('/Create', function (req, res, next) {
+    db.view('color/by_name', function (err, rows) {
+        if (!err) {
+            res.colors = rows;
+        }
+        else {
+            console.log('There was an error fetching colors.' + err);
+            res.colors = [];
+        }
+        next();
+    });
+});
+
+router.get('/Create', function (req, res, next) {
+    db.view('brand/by_name', function (err, rows) {
+        if (!err) {
+            res.brands = rows;
+        }
+        else {
+            console.log('There was an error fetching brands.' + err);
+            res.brands = [];
+        }
+        next();
+    });
+});
+
 router.get('/Create', routesAuthorize.isAuthorized(), function (req, res) {
     var data = {
-        _id: '',
-        _ver: '',
-        ProductName: '',
-        SalePrice: 0
+        _id: ''
+        ,_ver: ''
+        ,ProductName: ''
+        ,SalePrice: 0
+        ,Sizes:[]
+        ,Colors:[]
+        ,BrandID:0
     };
     
     console.log(!req.query.id);
     
     if (!req.query.id) {
         
-        res.render('product_new', { title: 'Create Product', isAuthenticated: req.isAuthenticated()
+        res.render('product_new', { title: 'Edit Product', isAuthenticated: req.isAuthenticated()
             , data: data
             , categories: res.categories
             , sizes: res.sizes
+            , colors: res.colors
+            , brands: res.brands
         });
 
     } else {
@@ -86,6 +117,8 @@ router.get('/Create', routesAuthorize.isAuthorized(), function (req, res) {
                     , data: body
                     , categories: res.categories
                     , sizes: res.sizes
+                    , colors: res.colors
+                    , brands: res.brands
                 })
             }
         })
@@ -113,6 +146,8 @@ router.post('/Create', upload.single('Picture'), routesAuthorize.isAuthorized(),
         ,DiscountAmount: req.body.DiscountAmount
         ,CategoryID: req.body.CategoryID
         ,Sizes: req.body.Sizes
+        ,Colors: req.body.Colors
+        ,BrandID: req.body.BrandID
     };
 
     db.get(req.body._id, function (err, body) {
@@ -131,35 +166,96 @@ router.post('/Create', upload.single('Picture'), routesAuthorize.isAuthorized(),
 
 });
 
-router.get('/Purchase', function (req, res) {
-    var data = {
-        _id: '',
-        _ver: '',
-        ProductName: '',
-        SalePrice: 0
+//Fetch product (/Product/Purchase)
+router.get('/Purchase', function (req, res, next){
+    var model = {
+        title: 'Purchase Product'
+        , message: ''
+        , data:{}
+        , isAuthenticated: req.isAuthenticated()
     };
 
-    if (!req.query.id) {
-        
-        res.render('product_purchase', {
-            title: 'Product not found'
-            , isAuthenticated: req.isAuthenticated()
-            , message: 'Product not found'
-        });
-
-    } else {
-        db.get(req.query.id, { revs_info: true }, function (err, body) {
+    if (req.query.id) {
+        db.get(req.query.id, { revs_info: true }, function (err, product) {
             if (!err) {
-                res.render('product_purchase', {
-                    title: 'Create Product'
-                    , isAuthenticated: req.isAuthenticated()
-                    , data: body
-                    , message: ''
-                });
-            };
+                model.data = product;
+                console.log("product found");
+
+                res.model = model;
+                next();
+            }
+            else{
+                res.model = model;
+                next();
+            }
         });
     }
-})
+    else{
+        res.model = model;
+        next();
+    }
+});
+
+//Fetch sizes for product (/Product/Purchase)
+router.get('/Purchase', function (req, res, next){
+    var model = res.model;
+
+    if (model.data.Sizes){
+        db.get(model.data.Sizes, function(err, Sizes){
+            if (!err){
+                model.data.Sizes = Sizes;
+                console.log("sizes found");
+                res.model = model;
+                next();
+            }
+            else{
+                res.model = model;
+                next();
+            }
+        });
+    }
+    else{
+        res.model = model;
+        next();
+    }
+});
+
+//Fetch colors for product (/Product/Purchase)
+router.get('/Purchase', function (req, res, next){
+    var model = res.model;
+
+    console.log(model.data.Colors);
+
+    if (model.data.Colors){
+        db.get(model.data.Colors, function(err, Colors){
+            if (!err){
+                if (Colors instanceof Array) {
+                    console.log('Colors is array');
+                } else{
+                    console.log('Colors is not array');
+                    Colors = [Colors];
+                }
+
+                model.data.Colors = Colors;
+                res.model = model;
+                next();
+            }
+            else{
+                res.model = model;
+                next();
+            }
+        });
+    }
+    else{
+        res.model = model;
+        next();
+    }
+});
+
+//Render /Product/Purchase view
+router.get('/Purchase', function (req, res) {
+    res.render('product_purchase', res.model);
+});
 
 router.post('/Purchase', urlencodedParser, function (req, res) {
     var form = new formidable.IncomingForm();
@@ -177,13 +273,17 @@ router.post('/Purchase', urlencodedParser, function (req, res) {
             }
             
             var data = {
-                Type: 'Checkout',
-                ProductID: fields._id,
-                ProductName: fields.ProductName,
-                SalePrice: fields.SalePrice,
-                Description: fields.Description,
-                DiscountAmount: fields.DiscountAmount,
-                ChargedAmount: fields.DiscountAmount > 0 ? fields.SalePrice - fields.DiscountAmount : fields.SalePrice,
+                Type: 'Checkout'
+                , ProductID: fields._id
+                , ProductName: fields.ProductName
+                , SalePrice: fields.SalePrice
+                , Description: fields.Description
+                , DiscountAmount: fields.DiscountAmount
+                , ChargedAmount: fields.DiscountAmount > 0 ? fields.SalePrice - fields.DiscountAmount : fields.SalePrice
+                , ColorID: fields.ColorID
+                , SizeID: fields.SizeID
+                , ColorName: fields.SelectedColorName
+                , SizeName: fields.SelectedSizeName
             };
 
             cart.push(data);

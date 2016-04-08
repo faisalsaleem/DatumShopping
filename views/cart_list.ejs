@@ -27,12 +27,14 @@
                     <div class="col-md-12">
                         <table class="table table-responsive table-condensed table-bordered table-hover">
                             <tr>
-                                <th>Sr.</th>
-                                <th>Name</th>
-                                <th>Sale Price</th>
-                                <th>Discount</th>
-                                <th>Paid</th>
-                                <th></th>
+                                <th class="col-sm-1">Sr.</th>
+                                <th class="col-sm-3">Name</th>
+                                <th class="col-sm-1">To Pay</th>
+                                <th class="col-sm-1">Sale Price</th>
+                                <th class="col-sm-1">Discount</th>
+                                <th class="col-sm-1">Size</th>
+                                <th class="col-sm-1">Color</th>
+                                <th class="col-sm-1"></th>
                             </tr>
 
                             <% if (data != 'undefined') { %>
@@ -41,13 +43,17 @@
                                     <tr>
                                         <td><%= i++ %></td>
                                         <td><%= row.ProductName %></td>
-                                        <td><%= row.SalePrice %></td>
-                                        <% if (row.DiscountAmount > 0) { %>
-                                            <td><%= row.DiscountAmount %></td>
-                                        <% } else { %>
-                                            <td>0</td>
-                                        <% } %>
                                         <td><%= row.ChargedAmount %></td>
+                                        <td><%= row.SalePrice %></td>
+                                        <td>
+                                            <% if (row.DiscountAmount > 0) { %>
+                                                <%= row.DiscountAmount %>
+                                            <% } else { %>
+                                                0
+                                            <% } %>
+                                        </td>
+                                        <td> <%= row.SizeName %> </td>
+                                        <td> <%= row.ColorName %> </td>
                                         <td>
                                             <form action="/Cart/Delete?id=<%= row.ProductID %>&amp;rev=<%= row._rev %>" method="post">
                                                 <button type="submit" class="btn btn-danger btn-xs">Delete</button>

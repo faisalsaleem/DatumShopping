@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <% include head %>
+    </head>
+
+    <body>
+        <% include header %>
+
+        <div class="container">
+            <div class="main-content">
+
+                <div class="form form-horizontal">
+                    <form method="post" enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label for="Picture" class="col-md-2">Pdf File</label>
+                            <div class="col-md-10">
+                                <input type="file" id="Picture" name="Picture" accept="application/pdf" value="" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-1">
+                                <input type="submit" value="Save" class="btn btn-primary"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <% include footer %>
+    </body>
+
+</html>

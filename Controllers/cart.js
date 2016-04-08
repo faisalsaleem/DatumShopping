@@ -5,7 +5,7 @@
     , paypalFile = require('../Controllers/paypal.js')
     //, routesAuthorize = require('./authorize.js')
     , cradle = require('cradle')
-    , db = new(cradle.Connection)().database('datum_shopping')
+    , db = new(cradle.Connection)('192.168.1.13').database('datum_shopping')
 
 router.get('/', function (req, res) {
     console.log(req.session.cart);
@@ -89,7 +89,7 @@ var checkoutCallback = function (req, res) {
 router.post('/Checkout', urlencodedParser, function (req, res) {
     var paypal = paypalFile.init('fysalsaleem_api1.gmail.com', '7HAKSGKM9XJQNH7X'
         , 'An5ns1Kso7MWUdW4ErQKJJJ4qi4-AbcNBJ-.Gxik3u0jVKs1uI4Vq7uw'
-        , 'http://127.0.0.1:3000/cart/CheckoutSuccess', 'http://127.0.0.1:3000/cart/CheckoutError'
+        , 'http://192.168.72.128:3000/cart/CheckoutSuccess', 'http://192.168.72.128:3000/cart/CheckoutError'
         , true);
 
     var totalAmount = 0;

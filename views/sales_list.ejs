@@ -18,6 +18,8 @@
                         <th>Sale Price</th>
                         <th>Discount</th>
                         <th>Paid</th>
+                        <th>Size Name</th>
+                        <th>Color Name</th>
                         <th></th>
                     </tr>
 
@@ -33,6 +35,8 @@
                                 <td><%= row.DiscountAmount %></td>
                             <% } %>
                             <td> <%= row.ChargedAmount %> </td>
+                            <td> <%= row.SizeName %> </td>
+                            <td> <%= row.ColorName %> </td>
                             <td>
                                 <form action="/Sales/Delete?id=<%= row._id %>&amp;rev=<%= row._rev %>" method="post">
                                     <button type="submit" class="btn btn-danger btn-xs">Delete</button>

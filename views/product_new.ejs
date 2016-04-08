@@ -105,21 +105,35 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="Size" class="col-md-1">Size</label>
+                            <label for="Sizes" class="col-md-1">Size</label>
                             <div class="col-md-11">
                                 <select id="Sizes" name="Sizes" class="select2" multiple="multiple" style="width:100%;">
                                     <% if (sizes !== 'undefined') { sizes.forEach(function(row) { %>
-                                        <option value="<%= row._id %>"
-                                                <% if(data.Sizes && data.SizeID == row._id){ %>
-                                                <%= "selected" %>
-                                                <% } %>>
+                                        <option value="<%= row._id %>">
                                             <%= row.SizeName %>
                                         </option>
                                     <% })} %>
                                 </select>
                                 <script type="text/javascript">
-                                    $(".select2").select2();
-                                    $(".select2").val(<%- JSON.stringify(data.Sizes) %>).trigger("change");
+                                    $("#Sizes").select2();
+                                    $("#Sizes").val(<%- JSON.stringify(data.Sizes) %>).trigger("change");
+                                </script>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Colors" class="col-md-1">Color</label>
+                            <div class="col-md-11">
+                                <select id="Colors" name="Colors" class="select2" multiple="multiple" style="width:100%;">
+                                    <% if (colors !== 'undefined') { colors.forEach(function(row) { %>
+                                    <option value="<%= row._id %>">
+                                        <%= row.ColorName %>
+                                    </option>
+                                    <% })} %>
+                                </select>
+                                <script type="text/javascript">
+                                    $("#Colors").select2();
+                                    $("#Colors").val(<%- JSON.stringify(data.Colors) %>).trigger("change");
                                 </script>
                             </div>
                         </div>
